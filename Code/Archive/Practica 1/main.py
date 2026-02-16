@@ -152,7 +152,7 @@ class Interfaz(ttk.Window):
         valor = None
         valor = Querybox.get_float(f"Ingrese la coordenada {coordenada} del nuevo punto", 
                                 title=f"Agregar coordenada {coordenada} de punto",
-                                initialvalue=0.0, minvalue= 0.0, maxvalue=100.0)
+                                initialvalue=0.0, minvalue= 0.0, maxvalue=60)
         
         if valor is None:
             Messagebox.show_error(f"Valor de {coordenada} no ingresado", "Operación cancelada")
@@ -182,7 +182,7 @@ class Interfaz(ttk.Window):
 
         for clase in self.clases:
             for elemento in clase.elementos:
-                if elemento.x == valor_x and elemento.y == valor_y:
+                if math.isclose(elemento.x, valor_x, abs_tol=sep) and math.isclose(elemento.y, valor_y, abs_tol=sep):
                     Messagebox.show_error("El punto ingresado ya pertenece a una clase. Intente con otro punto.", "Punto duplicado")
                     return
         
