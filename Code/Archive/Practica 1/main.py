@@ -20,7 +20,7 @@ class Punto():
         self.y = y
         self.clasificado = False
 
-    def definir_clase(self, clases):
+    def definir_clase(self, clases, distancia_minima=25):
         lista_distancias = []
         for clase in clases:
             centroide_x, centroide_y = clase.centroide
@@ -28,7 +28,7 @@ class Punto():
             lista_distancias.append(distancia)
 
         min_distancia = min(lista_distancias)
-        if min_distancia > 5:
+        if min_distancia > distancia_minima:
             return None
         if lista_distancias.count(min_distancia) > 1:
             return "Empate"
@@ -36,12 +36,12 @@ class Punto():
             return lista_distancias.index(min_distancia)
 
 class Clase():
-    def __init__(self, intervalo_x, intervalo_y):
+    def __init__(self, intervalo_x, intervalo_y, num_elementos=8):
         self.intervalo_x = intervalo_x
         self.intervalo_y = intervalo_y
         self.elementos = []
         self.no_elementos = 0
-        self.inicializar_elementos(8)
+        self.inicializar_elementos(num_elementos)
         self.calcular_centroide()
 
     def inicializar_elementos(self, num_elementos=8):
@@ -72,6 +72,8 @@ class Interfaz(ttk.Window):
     def __init__(self):
         self.clases = []
         self.punto_sin_clase = None
+        self.distancia_minima_clasificacion = 25
+        self.minimo_puntos_clase = 8
         
         super().__init__(themename="superhero")
         self.title("Practica 1")
@@ -139,7 +141,7 @@ class Interfaz(ttk.Window):
     # * Metodos de funcionalidad de los botones
     def _crear_clases(self):
         if len(self.clases) == 0:
-            self.clases = [Clase(intervalo_x, intervalo_y) for intervalo_x, intervalo_y in clases]
+            self.clases = [Clase(intervalo_x, intervalo_y, self.minimo_puntos_clase) for intervalo_x, intervalo_y in clases]
             valido = self.verificar_traslape_clases()
             if not valido:
                 self.clases = []
@@ -198,7 +200,7 @@ class Interfaz(ttk.Window):
             Messagebox.show_warning("No hay ningún punto sin clase para clasificar. Agrega un nuevo punto primero.", title="Advertencia")
             return
         
-        indice_clase = self.punto_sin_clase.definir_clase(self.clases)
+        indice_clase = self.punto_sin_clase.definir_clase(self.clases, self.distancia_minima_clasificacion)
         if indice_clase not in [None, "Empate"]:
             self.clases[indice_clase].anadir_elemento(self.punto_sin_clase)
             self.clases[indice_clase].calcular_centroide()
