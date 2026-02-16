@@ -133,11 +133,11 @@ class Interfaz(ttk.Window):
         #! AÑADIR LOS COMMANDS
         self.label_distancia_clasificacion = ttk.Label(self.marco_configuraciones_adicionales, text=f"Distancia mínima para clasificación (actual: {self.distancia_minima_clasificacion})")
         self.label_distancia_clasificacion.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
-        self.boton_configurar_distancia_clasificacion = ttk.Button(self.marco_configuraciones_adicionales, text="Configurar distancia mínima para clasificación")
+        self.boton_configurar_distancia_clasificacion = ttk.Button(self.marco_configuraciones_adicionales, text="Configurar distancia mínima para clasificación", command=self.configurar_distancia_clasificacion)
         self.boton_configurar_distancia_clasificacion.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
         self.label_minimo_puntos_clase = ttk.Label(self.marco_configuraciones_adicionales, text=f"Mínimo de puntos por clase (actual: {self.minimo_puntos_clase})")
         self.label_minimo_puntos_clase.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
-        self.boton_configurar_minimo_puntos_clase = ttk.Button(self.marco_configuraciones_adicionales, text="Configurar mínimo de puntos por clase")
+        self.boton_configurar_minimo_puntos_clase = ttk.Button(self.marco_configuraciones_adicionales, text="Configurar mínimo de puntos por clase", command=self.configurar_minimo_puntos_clase)
         self.boton_configurar_minimo_puntos_clase.grid(row=4, column=0, padx=10, pady=10, sticky="nsew")
 
     def _iniciar_grafica(self):
@@ -311,10 +311,28 @@ class Interfaz(ttk.Window):
 
 
     def configurar_distancia_clasificacion(self):
-        pass
+        nuevo_valor = None
+        nuevo_valor = Querybox.get_float(f"Ingrese la nueva distancia mínima para clasificación",
+                                  title=f"Configurar distancia mínima",
+                                  initialvalue=25.0, minvalue=0.0, maxvalue=100.0)
+       
+        if nuevo_valor is None:
+            return
 
+        self.distancia_minima_clasificacion = nuevo_valor
+        self.label_distancia_clasificacion.config(text=f"Distancia mínima para clasificación (actual: {self.distancia_minima_clasificacion})")
+    
     def configurar_minimo_puntos_clase(self):
-        pass
+        nuevo_valor = None
+        nuevo_valor = Querybox.get_integer(f"Ingrese el número máximo de elementos por clase", 
+                                        title=f"Configurar número máximo",
+                                        initialvalue=15, minvalue=1, maxvalue=15)
+        
+        if nuevo_valor is None:
+            return
+
+        self.minimo_puntos_clase = nuevo_valor
+        self.label_minimo_puntos_clase.config(text=f"Mínimo de puntos por clase (actual: {self.minimo_puntos_clase})")
 
     #* Metodo chequeo de traslape entre clases
     def verificar_traslape_clases(self):
