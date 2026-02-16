@@ -1,3 +1,4 @@
+import math
 import random
 from math import sqrt
 import ttkbootstrap as ttk
@@ -5,12 +6,13 @@ from ttkbootstrap.dialogs import Messagebox, Querybox
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-clases=[((0,10),(0,10)),
-        ((0,20),(10,20)),
-        ((20,30),(20,30)),
-        ((30,40),(30,40)),
-        ((40,50),(40,50)),
-        ((50,60),(50,60))]
+sep = 1e-9
+clases=[((0,10-sep),(0,10-sep)),
+        ((10,20-sep),(10,20-sep)),
+        ((20,30-sep),(20,30-sep)),
+        ((30,40-sep),(30,40-sep)),
+        ((40,50-sep),(40,50-sep)),
+        ((50,60-sep),(50,60-sep))]
 
 class Punto():
     def __init__(self, x, y):
@@ -45,12 +47,11 @@ class Clase():
     def inicializar_elementos(self, num_elementos=8):
         while self.no_elementos < num_elementos:
             duplicado = False
-            #? Si el profe dice q es traslape asi se coloca esto y actualizan intervalos: eps = 1e-9
             x = random.uniform(self.intervalo_x[0], self.intervalo_x[1])
             y = random.uniform(self.intervalo_y[0], self.intervalo_y[1])
             # Se itera hasta que se generen los n elementos únicos, evitando duplicados
             for elemento in self.elementos:
-                if elemento.x == x and elemento.y == y:
+                if math.isclose(elemento.x, x, abs_tol=sep) and math.isclose(elemento.y, y, abs_tol=sep):
                     duplicado = True
                     break
             if not duplicado:
