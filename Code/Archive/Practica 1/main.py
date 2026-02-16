@@ -123,6 +123,23 @@ class Interfaz(ttk.Window):
         self.boton_clasificar_punto = ttk.Button(self.marco_puntos, text="Clasificar punto", command= self._clasificar_punto)
         self.boton_clasificar_punto.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
 
+        self.marco_configuraciones_adicionales = ttk.Labelframe(self.frame_controles_usuario, text="Configuraciones adicionales")
+        self.marco_configuraciones_adicionales.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
+        self.marco_configuraciones_adicionales.columnconfigure(0, weight=1)
+        titulo_instrucciones_configuraciones = ttk.Label(self.marco_configuraciones_adicionales, text="Configura parámetros adicionales para las clases o clasificacion")
+        titulo_instrucciones_configuraciones.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+
+        #! AÑADIR LOS COMMANDS
+        self.label_distancia_clasificacion = ttk.Label(self.marco_configuraciones_adicionales, text=f"Distancia mínima para clasificación (actual: {self.distancia_minima_clasificacion})")
+        self.label_distancia_clasificacion.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        self.boton_configurar_distancia_clasificacion = ttk.Button(self.marco_configuraciones_adicionales, text="Configurar distancia mínima para clasificación")
+        self.boton_configurar_distancia_clasificacion.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+        self.label_minimo_puntos_clase = ttk.Label(self.marco_configuraciones_adicionales, text=f"Mínimo de puntos por clase (actual: {self.minimo_puntos_clase})")
+        self.label_minimo_puntos_clase.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
+        self.boton_configurar_minimo_puntos_clase = ttk.Button(self.marco_configuraciones_adicionales, text="Configurar mínimo de puntos por clase")
+        self.boton_configurar_minimo_puntos_clase.grid(row=4, column=0, padx=10, pady=10, sticky="nsew")
+
     def _iniciar_grafica(self):
         self.figura = Figure(figsize=(5, 4), dpi=100)
         self.ax = self.figura.add_subplot(111)
@@ -249,6 +266,15 @@ class Interfaz(ttk.Window):
         if len(self.clases) > 0:
             self.ax.legend(loc='upper right', fontsize='small')
         self.canvas.draw()
+
+    def reiniciar_clases(self):
+        pass
+
+    def configurar_distancia_clasificacion(self):
+        pass
+
+    def configurar_minimo_puntos_clase(self):
+        pass
 
     #* Metodo chequeo de traslape entre clases
     def verificar_traslape_clases(self):
