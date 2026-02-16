@@ -109,7 +109,7 @@ class Interfaz(ttk.Window):
         titulo_instrucciones.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
         self.boton_crear_clases = ttk.Button(self.marco_clases, text="Crear clases", command= lambda: self._crear_clases())
         self.boton_crear_clases.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
-        self.boton_reiniciar_clases = ttk.Button(self.marco_clases, text="Reiniciar clases")
+        self.boton_reiniciar_clases = ttk.Button(self.marco_clases, text="Reiniciar clases", command= self.reiniciar_clases)
         self.boton_reiniciar_clases.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
 
         self.marco_puntos = ttk.Labelframe(self.frame_controles_usuario, text="Puntos sin clase")
@@ -268,7 +268,47 @@ class Interfaz(ttk.Window):
         self.canvas.draw()
 
     def reiniciar_clases(self):
-        pass
+        if len(self.clases) == 0:
+            Messagebox.show_warning(
+                "No hay clases creadas para reiniciar.",
+                title="Advertencia"
+            )
+            return
+
+        respuesta = Messagebox.yesno(
+            "¿Deseas reiniciar las clases? "
+            "El punto ingresado se conservará.",
+            "Confirmar reinicio"
+        )
+
+        if respuesta in ["No", None]:
+            return
+
+        # Si el punto ya fue clasificado, lo buscamos y lo removemos
+        if self.punto_sin_clase is None:
+            # Buscar punto clasificado dentro de las clases
+            for clase in self.clases:
+                for punto in clase.elementos:
+                    if punto.clasificado:
+                        self.punto_sin_clase = punto
+                        punto.clasificado = False
+                        clase.elementos.remove(punto)
+                        clase.no_elementos -= 1
+                        clase.calcular_centroide()
+                        break
+
+        # Eliminar todas las clases
+        self.clases = []
+
+        # Redibujar gráfica (manteniendo punto sin clase)
+        self.actualizar_grafica()
+
+        Messagebox.show_info(
+            "Las clases fueron reiniciadas.\n"
+            "El punto se mantiene como no clasificado.",
+            title="Reinicio completado"
+        )
+
 
     def configurar_distancia_clasificacion(self):
         pass
